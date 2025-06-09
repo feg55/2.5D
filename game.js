@@ -143,7 +143,7 @@ function update(dt) {
             if (angle < 0) angle += Math.PI * 2;
             // Рассчитываем смещение по X для текстуры неба в зависимости от угла
             // Инвертируем смещение, чтобы текстура сдвигалась в противоположную сторону поворота
-            const speedMultiplier = 3;
+            const speedMultiplier = 5;
             const skyOffsetX = (1 - (((angle * speedMultiplier) % (Math.PI * 2)) / (Math.PI * 2))) * textures[1].width;
             const skyHeight = screenHeight / 2;
             // Рисуем небо с учетом смещения и обеспечиваем бесшовное поведение, рисуя два куска текстуры
