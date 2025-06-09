@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+    /* Сброс стилей и базовые настройки */
+    html, body {
+      overflow: hidden;
+      margin: 0; padding: 0;
+      background: #ffffff;
+      color: #6b7280;
+      font-family: 'Poppins', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.5;
+    }
+    /* Контейнеры */
+    header {
+      padding-top: 4rem;
+      padding-bottom: 2rem;
+      max-width: 1200px;
+      width: 100%;
+      text-align: center;
+      user-select: none;
+    }
+    h1 {
+      font-weight: 700;
+      font-size: 48px;
+      color: #111827;
+      margin: 0 0 0.5rem 0;
+      line-height: 1.1;
+    }
+    p {
+      font-weight: 500;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #374151;
+    }
+    main {
+      flex-grow: 1;
+      width: 100%;
+      max-width: 2560px;
+      padding: 2rem 1rem 4rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    canvas#game {
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      background: #f9fafb;
+      width: 100%;
+      height: 1440px;
+      image-rendering: pixelated;
+      display: block;
+    }
