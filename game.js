@@ -12,11 +12,11 @@
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,1,1,0,1,1,0,1,1,1,0,0,1],
+        [1,0,0,0,1,1,0,1,1,0,1,1,0,0,0,1],
         [1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
         [1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
         [1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1],
-        [1,0,0,1,1,1,0,1,1,0,1,1,1,0,0,1],
+        [1,0,0,0,1,1,0,1,1,0,1,1,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -43,7 +43,9 @@
       // Настройки текстур
       const textureSize = 256;
       const textures = [];
-      const textureSrcs = ["textures/wall.png", "textures/sky.png"]; // Укажите путь к вашей текстуре
+      const skyBox = [];
+      const skyBoxSrcs = ["textures/sky.png"]
+      const textureSrcs = ["textures/wall.png"]; // Укажите путь к вашей текстуре
 
       let texturesLoaded = 0;
       function loadTextures(callback) {
@@ -54,6 +56,19 @@
             textures[i] = img;
             texturesLoaded++;
             if (texturesLoaded === textureSrcs.length) callback();
+          };
+          img.onerror = () => console.error("Не удалось загрузить текстуру:", src);
+        });
+      }
+      let skyTexturesLoaded = 0;
+      function loadSkyTextures(callback) {
+        skyBoxSrcs.forEach((src, i) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => {
+            skyBox[i] = img;
+            skyTexturesLoaded++;
+            if (skyTexturesLoaded === skyBoxSrcs.length) callback();
           };
           img.onerror = () => console.error("Не удалось загрузить текстуру:", src);
         });
@@ -143,27 +158,27 @@ function update(dt) {
             if (angle < 0) angle += Math.PI * 2;
             // Рассчитываем смещение по X для текстуры неба в зависимости от угла
             // Инвертируем смещение, чтобы текстура сдвигалась в противоположную сторону поворота
-            const speedMultiplier = 5;
-            const skyOffsetX = (1 - (((angle * speedMultiplier) % (Math.PI * 2)) / (Math.PI * 2))) * textures[1].width;
+            const speedMultiplier =5;
+            const skyOffsetX = (1 - (((angle * speedMultiplier) % (Math.PI * 2)) / (Math.PI * 2))) * skyBox[0].width;
             const skyHeight = screenHeight / 2;
             // Рисуем небо с учетом смещения и обеспечиваем бесшовное поведение, рисуя два куска текстуры
             let sx1 = skyOffsetX;
-            let width1 = textures[1].width - sx1;
+            let width1 = skyBox[0].width - sx1;
             width1 = Math.min(width1, screenWidth);
             ctx.drawImage(
-              textures[1],
+              skyBox[0],
               sx1, 0,
-              width1, textures[1].height,
+              width1, skyBox[0].height,
               0, 0,
-              width1 * screenWidth / textures[1].width, skyHeight
+              width1 * screenWidth / skyBox[0].width, skyHeight
             );
-            const width2 = screenWidth - (width1 * screenWidth / textures[1].width);
+            const width2 = screenWidth - (width1 * screenWidth / skyBox[0].width);
             if (width2 > 0) {
               ctx.drawImage(
-                textures[1],
+                skyBox[0],
                 0, 0,
-                width2 * textures[1].width / screenWidth, textures[1].height,
-                width1 * screenWidth / textures[1].width, 0,
+                width2 * skyBox[0].width / screenWidth, skyBox[0].height,
+                width1 * screenWidth / skyBox[0].width, 0,
                 width2, skyHeight
               );
             }
@@ -285,6 +300,9 @@ function update(dt) {
 
       // Запуск после загрузки текстур
       loadTextures(() => {
+        requestAnimationFrame(loop);
+      });
+      loadSkyTextures(() => {
         requestAnimationFrame(loop);
       });
     })();
